@@ -16,6 +16,7 @@ body {
     margin: 0px;
     background-image: url('../img/doodle.png');
     background-size: 750px;
+    background-position: center;
 }
 
 a {
