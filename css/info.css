@@ -1,0 +1,23 @@
+/* info.css */
+
+.info {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.info__paragraph {
+    background-color: #FFF;
+    color: #005857;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.info__paragraph--error {
+    color: hsl(0, 100%, 30%);
+}
+
+.info__paragraph--hidden {
+    display: none;
+}

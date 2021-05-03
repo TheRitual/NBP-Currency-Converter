@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBP Currency Exchange</title>
+  <script defer src="js/calculator.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+    crossorigin="anonymous" />
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+  <link href="css/global.css" rel="stylesheet">
+  <link href="css/header.css" rel="stylesheet">
+  <link href="css/info.css" rel="stylesheet">
+  <link href="css/converter.css" rel="stylesheet">
+</head>
+
+<body>
+  <header class="header">
+    <h1 class="header__header">Currency Exchange with NBP API</h1>
+  </header>
+  <main>
+    <section class="info">
+      <p class="info__paragraph js-loading">Connecting to NBP. Please Wait...</p>
+      <p class="info__paragraph info__paragraph--error info__paragraph--hidden js-error">Can't connect to NBP...</p>
+    </section>
+
+    <section class="converter converter--hidden  js-converter">
+      <h2 class="converter__header">Converter</h2>
+      <form class="converter__form">
+
+        <p>
+          <label for="currencyField">Currency: </label><select id="currencyList"
+            class="js-currencyList converter__select"></select>
+        </p>
+
+        <p>
+          <input type="number" value="1.00" min="0" id="valuePLN" class="converter__field js-plnField" autofocus> <label
+            for="valuePLN">PLN</label>
+        </p>
+
+        <p>
+          <input type="number" value="1.00" min="0" id="currencyField" class="converter__field js-currencyField"><label for="currencyField"> <span
+              class="js-currencyCode">CODE</span></label>
+        </p>
+
+        <p class="converter__paragraph"><span class="js-currencyCode">USD</span> rate: <span
+            class="converter__rate js-rate">Loading Ratio</span></p>
+
+      </form>
+    </section>
+
+  </main>
+</body>
+
+</html>

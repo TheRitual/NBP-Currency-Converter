@@ -1,0 +1,64 @@
+/* converter.css */
+
+.converter {
+    width: 100%;
+    min-width: 400px;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+    font-size: 20px;
+    color: #005857;
+    background-color: #FFF;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px 5px #FFFFFF99;
+}
+
+.converter--hidden {
+    display: none;
+}
+
+.converter__header {
+    padding: 0 0 20px 0;
+}
+
+.converter__select {
+    font-family: 'Dela Gothic One', cursive;
+    width: 150px;
+    text-align: center;
+    border: #000 solid 2px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #FFF;
+    color: #005857;
+}
+
+.converter__select:active {
+    background-color: #005857;
+    color: #FFF;
+}
+
+.converter__select:focus {
+    background-color: #005857;
+    color: #FFF;
+}
+
+.converter__field {
+    font-family: 'Dela Gothic One', cursive;
+    width: 250px;
+    text-align: center;
+    border: #000 solid 2px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #FFF;
+    color: #005857;
+}
+
+.converter__field:active {
+    background-color: #ebebeb;
+}
+
+.converter__field:disabled {
+    background-color: #005857;
+    color: #DDD;
+}
