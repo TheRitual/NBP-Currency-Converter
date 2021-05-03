@@ -43,16 +43,16 @@
         </p>
 
         <p>
-          <input type="number" value="1.00" min="0" id="valuePLN" class="converter__field js-plnField" autofocus> <label
+          <input type="number" value="1.00" min="0" pattern="^\d{1,6}(\.\d{1,2})?$" id="valuePLN" class="converter__field js-plnField" autofocus> <label
             for="valuePLN">PLN</label>
         </p>
 
         <p>
-          <input type="number" value="1.00" min="0" id="currencyField" class="converter__field js-currencyField"><label for="currencyField"> <span
+          <input type="number" value="1.00" min="0" pattern="^\d{1,6}((\.|\,)\d{1,2})?$" id="currencyField" class="converter__field js-currencyField"><label for="currencyField"> <span
               class="js-currencyCode">CODE</span></label>
         </p>
 
-        <p class="converter__paragraph"><span class="js-currencyCode">USD</span> rate: <span
+        <p class="converter__paragraph"><span class="js-currencyCode">CODE</span> rate: <span
             class="converter__rate js-rate">Loading Ratio</span></p>
 
       </form>

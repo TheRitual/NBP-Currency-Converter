@@ -1,80 +1,113 @@
-let rate = document.querySelector(".js-rate");
-let converter = document.querySelector(".js-converter");
-let loading = document.querySelector(".js-loading");
-let loadingError = document.querySelector(".js-error");
-let select = document.querySelector(".js-currencyList");
-let plnField = document.querySelector(".js-plnField");
-let currencyField = document.querySelector(".js-currencyField");
-let currencyCode = document.querySelectorAll(".js-currencyCode");
+{
+    const doTheStep = (field, targetValue, step) => {
+        field.value = (Number(field.value) + step).toFixed(2);
+        if (
+            (step > 0 && Number(field.value) < targetValue) ||
+            (step < 0 && Number(field.value) > targetValue)
+        ) {
+            setTimeout(doTheStep, 5, field, targetValue, step);
+        } else {
+            field.value = targetValue.toFixed(2);
+        }
+    }
 
-fetch("https://api.nbp.pl/api/exchangerates/tables/C/?format=json")
-    .then((response) => response.json())
-    .then((data) => loadData(data))
-    .catch((error) => {
+    const easeChange = (field, targetValue) => {
+        let currentValue = field.value;
+        if (Math.abs(currentValue - targetValue) > 1) {
+            let step = (targetValue - currentValue) / 50;
+            doTheStep(field, targetValue, step);
+        } else {
+            field.value = targetValue.toFixed(2);
+        }
+    }
+
+    const onChangeCurrency = () => {
+        const plnField = document.querySelector(".js-plnField");
+        const currencyField = document.querySelector(".js-currencyField");
+        const currencyCode = document.querySelectorAll(".js-currencyCode");
+        const select = document.querySelector(".js-currencyList");
+        const rate = document.querySelector(".js-rate");
+        rate.innerText = select.value;
+        currencyCode.forEach((element) => {
+            element.innerText = select.options[select.selectedIndex].text;
+        });
+        currencyField.value = (plnField.value / select.value).toFixed(2);
+    }
+
+    const bindEvents = () => {
+        const plnField = document.querySelector(".js-plnField");
+        const currencyField = document.querySelector(".js-currencyField");
+        const select = document.querySelector(".js-currencyList");
+
+        select.addEventListener("change", () => onChangeCurrency());
+
+        plnField.addEventListener("change", () => {
+            plnField.value = plnField.value < 0.01 ? 0.1 : Number(plnField.value).toFixed(2);
+            const targetValue = (plnField.value / select.value);
+            easeChange(currencyField, targetValue);
+        });
+
+        currencyField.addEventListener("change", () => {
+            currencyField.value = currencyField.value < 0.01 ? 0.1 : Number(currencyField.value).toFixed(2);
+            const targetValue = (currencyField.value * select.value);
+            easeChange(plnField, targetValue);
+        });
+
+    }
+
+    const showError = () => {
+        const loading = document.querySelector(".js-loading");
+        const loadingError = document.querySelector(".js-error");
         loading.classList.add("info__paragraph--hidden");
         loadingError.classList.remove("info__paragraph--hidden");
-        console.log(error);
-    });
-
-function loadData(data) {
-    data[0].rates.forEach((element) => {
-        var node = document.createElement("option");
-        var textNode = document.createTextNode(element.code);
-        node.setAttribute("value", element.bid);
-        node.appendChild(textNode);
-        select.appendChild(node);
-    });
-    rate.innerText = select.value;
-    plnField.value = (currencyField.value * select.value).toFixed(2);
-    currencyCode.forEach((element) => {
-        element.innerText = select.options[select.selectedIndex].text;
-    });
-    loading.classList.add("info__paragraph--hidden");
-    converter.classList.remove("converter--hidden");
-}
-
-select.addEventListener("change", () => {
-    rate.innerText = select.value;
-    currencyCode.forEach((element) => {
-        element.innerText = select.options[select.selectedIndex].text;
-    });
-    currencyField.value = (plnField.value / select.value).toFixed(2);
-});
-
-plnField.addEventListener("change", () => {
-    if (plnField.value <= 0) {
-        plnField.value = 0.01;
     }
-    let targetValue = (plnField.value / select.value);
-    easeChange(currencyField, targetValue);
-});
 
-currencyField.addEventListener("change", () => {
-    if (currencyField.value <= 0) {
-        currencyField.value = 0.01;
+    const showApp = () => {
+        const converter = document.querySelector(".js-converter");
+        const loading = document.querySelector(".js-loading");
+        loading.classList.add("info__paragraph--hidden");
+        converter.classList.remove("converter--hidden");
     }
-    let targetValue = (currencyField.value * select.value);
-    easeChange(plnField, targetValue);
-});
 
-function doTheStep(field, targetValue, step) {
-    field.value = (Number(field.value) + step).toFixed(2);
-    if (
-        (step > 0 && Number(field.value) < targetValue) ||
-        (step < 0 && Number(field.value) > targetValue)
-    ) {
-        setTimeout(doTheStep, 5, field, targetValue, step);
-    } else {
-        field.value = targetValue.toFixed(2);
+    const createCurrencyTable = (data) => {
+        const currencyTable = [];
+        data[0].rates.forEach((element) => {
+            currencyTable.push({ code: element.code, bid: element.bid });
+        });
+        return currencyTable;
     }
-}
 
-function easeChange(field, targetValue) {
-    let currentValue = field.value;
-    if (Math.abs(currentValue - targetValue) > 1) {
-        let step = (targetValue - currentValue) / 50;
-        doTheStep(field, targetValue, step);
-    } else {
-        field.value = targetValue.toFixed(2);
+    const renderCurrencyList = (currencyTable) => {
+        const select = document.querySelector(".js-currencyList");
+        let htmlString = "";
+        for (const currency of currencyTable) {
+            htmlString += `<option value="${currency.bid}">${currency.code}</option>\n`;
+        }
+        select.innerHTML = htmlString;
+        onChangeCurrency();
     }
+
+    const loadApp = (data) => {
+        const currencyTable = createCurrencyTable(data);
+        showApp();
+        renderCurrencyList(currencyTable);
+        bindEvents();
+    }
+
+    const fetchData = () => {
+        fetch("https://api.nbp.pl/api/exchangerates/tables/C/?format=json")
+            .then((response) => response.json())
+            .then((data) => loadApp(data))
+            .catch((error) => {
+                showError();
+                console.log(error);
+            });
+    }
+
+    const init = () => {
+        fetchData();
+    }
+
+    init();
+
 }
