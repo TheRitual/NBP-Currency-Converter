@@ -3,4 +3,5 @@
 .header__header {
     text-align: center;
     color: #FFF;
+    text-shadow: 0 0 10px #000;
 }

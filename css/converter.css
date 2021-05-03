@@ -11,7 +11,7 @@
     background-color: #FFF;
     padding: 20px;
     border-radius: 20px;
-    box-shadow: 5px 5px 15px 5px #FFFFFF99;
+    box-shadow: 0 0 10px 10px #00000099;
 }
 
 .converter--hidden {

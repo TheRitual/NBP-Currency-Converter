@@ -14,6 +14,8 @@ body {
     font-family: 'Dela Gothic One', cursive;
     background-color: #005857;
     margin: 0px;
+    background-image: url('../img/doodle.png');
+    background-size: 750px;
 }
 
 a {
