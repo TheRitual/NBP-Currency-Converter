@@ -42,13 +42,13 @@
         select.addEventListener("change", () => onChangeCurrency());
 
         plnField.addEventListener("change", () => {
-            plnField.value = plnField.value < 0.01 ? 0.1 : Number(plnField.value).toFixed(2);
+            plnField.value = plnField.value < 0.01 ? 0.01 : Number(plnField.value).toFixed(2);
             const targetValue = (plnField.value / select.value);
             easeChange(currencyField, targetValue);
         });
 
         currencyField.addEventListener("change", () => {
-            currencyField.value = currencyField.value < 0.01 ? 0.1 : Number(currencyField.value).toFixed(2);
+            currencyField.value = currencyField.value < 0.01 ? 0.01 : Number(currencyField.value).toFixed(2);
             const targetValue = (currencyField.value * select.value);
             easeChange(plnField, targetValue);
         });
