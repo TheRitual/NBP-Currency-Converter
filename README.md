@@ -2,7 +2,7 @@
 
 Currency exchange app fetching current values from NBP API
 
-![screenshoot](https://theritual.github.io/NBPCurrencyConverter/img/splash.png)
+![screenshoot](https://theritual.github.io/NBPCurrencyConverter/img/screen.png)
 
 LINK:
 https://theritual.github.io/NBPCurrencyConverter/
