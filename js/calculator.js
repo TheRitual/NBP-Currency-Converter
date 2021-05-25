@@ -11,7 +11,7 @@
         }
     }
 
-    const easeChange = (field, targetValue) => {
+    const niceTransition = (field, targetValue) => {
         let currentValue = field.value;
         if (Math.abs(currentValue - targetValue) > 1) {
             let step = (targetValue - currentValue) / 50;
@@ -21,15 +21,15 @@
         }
     }
 
-    const onChangeCurrency = () => {
+    const changeCurrencyText = () => {
         const plnField = document.querySelector(".js-plnField");
         const currencyField = document.querySelector(".js-currencyField");
-        const currencyCode = document.querySelectorAll(".js-currencyCode");
+        const currencyCodes = document.querySelectorAll(".js-currencyCode");
         const select = document.querySelector(".js-currencyList");
         const rate = document.querySelector(".js-rate");
         rate.innerText = select.value;
-        currencyCode.forEach((element) => {
-            element.innerText = select.options[select.selectedIndex].text;
+        currencyCodes.forEach((element) => {
+            element.innerText = document.querySelector(".js-currencyList option:checked").text;
         });
         currencyField.value = (plnField.value / select.value).toFixed(2);
     }
@@ -39,18 +39,18 @@
         const currencyField = document.querySelector(".js-currencyField");
         const select = document.querySelector(".js-currencyList");
 
-        select.addEventListener("change", () => onChangeCurrency());
+        select.addEventListener("input", changeCurrencyText);
 
-        plnField.addEventListener("change", () => {
+        plnField.addEventListener("input", () => {
             plnField.value = plnField.value < 0.01 ? 0.01 : Number(plnField.value).toFixed(2);
-            const targetValue = (plnField.value / select.value);
-            easeChange(currencyField, targetValue);
+            const targetValue = plnField.value / select.value;
+            niceTransition(currencyField, targetValue);
         });
 
-        currencyField.addEventListener("change", () => {
+        currencyField.addEventListener("input", () => {
             currencyField.value = currencyField.value < 0.01 ? 0.01 : Number(currencyField.value).toFixed(2);
-            const targetValue = (currencyField.value * select.value);
-            easeChange(plnField, targetValue);
+            const targetValue = currencyField.value * select.value;
+            niceTransition(plnField, targetValue);
         });
 
     }
@@ -81,23 +81,21 @@
         const select = document.querySelector(".js-currencyList");
         let htmlString = "";
         for (const currency of currencyTable) {
-            htmlString += `<option value="${currency.bid}">${currency.code}</option>\n`;
+            htmlString += `<option value="${currency.bid}" class="js-currencyOption">${currency.code}</option>\n`;
         }
         select.innerHTML = htmlString;
-        onChangeCurrency();
+        changeCurrencyText();
     }
 
     const loadApp = (data) => {
-        const currencyTable = createCurrencyTable(data);
         showApp();
-        renderCurrencyList(currencyTable);
+        renderCurrencyList(createCurrencyTable(data));
         bindEvents();
     }
 
     const fetchData = () => {
-        fetch("https://api.nbp.pl/api/exchangerates/tables/C/?format=json")
+        return fetch("https://api.nbp.pl/api/exchangerates/tables/C/?format=json")
             .then((response) => response.json())
-            .then((data) => loadApp(data))
             .catch((error) => {
                 showError();
                 console.log(error);
@@ -105,7 +103,7 @@
     }
 
     const init = () => {
-        fetchData();
+        fetchData().then(loadApp);
     }
 
     init();
